@@ -6,8 +6,21 @@ import { useContext } from "react";
 // import { TransactionContext } from "../context/TransactionContext";
 // import Modal from "react-modal";
 import { useRouter } from "next/router";
+import { TransactionContext } from "../../contexts/TrasactionContext";
 
 const Main = () => {
+  const { formData, handleChange, sendTransaction } =
+    useContext(TransactionContext);
+  const router = useRouter();
+
+  const handleSubmit = async (e: any) => {
+    const { addressTo, amount } = formData;
+    e.preventDefault();
+
+    if (!addressTo || !amount) return;
+
+    sendTransaction();
+  };
   return (
     <div className={style.wrapper}>
       <div className={style.content}>
