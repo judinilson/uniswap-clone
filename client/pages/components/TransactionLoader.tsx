@@ -16,6 +16,8 @@ const TransactionLoader = () => {
   return (
     <div className={style.wrapper}>
       <div className={style.title}>Transaction in progress...</div>
+      {/*
+ // @ts-ignore */}
       <MoonLoader color={"#fff"} loading={true} css={cssOverride} size={50} />
     </div>
   );
