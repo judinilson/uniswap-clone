@@ -15,7 +15,7 @@ Uniswap is a cryptocurrency exchange which uses a decentralized network protocol
 
 ### UNISWAP CLONE LINK
 
-- https://uniswap-client-judinilson.vercel.app/
+- https://uniswap-client.vercel.app
 
 # Getting Started
 
