@@ -11,7 +11,7 @@ Uniswap is a cryptocurrency exchange which uses a decentralized network protocol
 
 # Project Results
 
-![Logo](./assets/project-result.png)
+![Logo](./client/assets/project-result.png)
 
 ### UNISWAP CLONE LINK
 
