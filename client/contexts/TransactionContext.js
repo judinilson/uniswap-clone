@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { contractABI, contractAddress } from "../lib/constants";
 import { ethers } from "ethers";
-// import { client } from "../lib/sanityClient";
+import { client } from "../lib/sanityClient";
 import { useRouter } from "next/router";
 
 export const TransactionContext = React.createContext();
@@ -12,7 +12,6 @@ if (typeof window !== "undefined") {
   eth = window.ethereum;
 }
 
-//geting our contract from the address is deployed to
 const getEthereumContract = () => {
   const provider = new ethers.providers.Web3Provider(ethereum);
   const signer = provider.getSigner();
@@ -33,6 +32,35 @@ export const TransactionProvider = ({ children }) => {
     addressTo: "",
     amount: "",
   });
+
+  /**
+   * Trigger loading modal
+   */
+  // useEffect(() => {
+  //   if (isLoading) {
+  //     router.push(`/?loading=${currentAccount}`);
+  //   } else {
+  //     router.push(`/`);
+  //   }
+  // }, [isLoading]);
+
+  /**
+   * Create user profile in Sanity
+   */
+  useEffect(() => {
+    if (!currentAccount) return;
+    (async () => {
+      const userDoc = {
+        _type: "users",
+        _id: currentAccount,
+        userName: `unamed`,
+        address: currentAccount,
+      };
+
+      await client.createIfNotExists(userDoc);
+    })();
+  }, [currentAccount]);
+
   const handleChange = (e, name) => {
     setFormData((prevState) => ({ ...prevState, [name]: e.target.value }));
   };
@@ -77,6 +105,47 @@ export const TransactionProvider = ({ children }) => {
   };
 
   /**
+   * Saves transaction to Sanity DB
+   * @param {string} txHash Transaction hash
+   * @param {number} amount Amount of ETH that was sent
+   * @param {string} fromAddress Sender address
+   * @param {string} toAddress Recipient address
+   * @returns null
+   */
+  const saveTransaction = async (
+    txHash,
+    amount,
+    fromAddress = currentAccount,
+    toAddress
+  ) => {
+    const txDoc = {
+      _type: "transactions",
+      _id: txHash,
+      fromAddress: fromAddress,
+      toAddress: toAddress,
+      timestamp: new Date(Date.now()).toISOString(),
+      txHash: txHash,
+      amount: parseFloat(amount),
+    };
+
+    await client.createIfNotExists(txDoc);
+
+    await client
+      .patch(currentAccount)
+      .setIfMissing({ transactions: [] })
+      .insert("after", "transactions[-1]", [
+        {
+          _key: txHash,
+          _ref: txHash,
+          _type: "reference",
+        },
+      ])
+      .commit();
+
+    return;
+  };
+
+  /**
    * Executes a transaction
    * @param {*} metamask Injected MetaMask code from the browser
    * @param {string} currentAccount Current user's address
@@ -104,7 +173,7 @@ export const TransactionProvider = ({ children }) => {
         ],
       });
 
-      const transactionHash = await transactionContract.publishTransaction(
+      const transactionHash = await transactionContract.PlublishTransaction(
         addressTo,
         parsedAmount,
         `Transferring ETH ${parsedAmount} to ${addressTo}`,
@@ -115,12 +184,12 @@ export const TransactionProvider = ({ children }) => {
 
       await transactionHash.wait();
 
-      // await saveTransaction(
-      //   transactionHash.hash,
-      //   amount,
-      //   connectedAccount,
-      //   addressTo
-      // );
+      await saveTransaction(
+        transactionHash.hash,
+        amount,
+        connectedAccount,
+        addressTo
+      );
 
       setIsLoading(false);
     } catch (error) {
@@ -131,6 +200,7 @@ export const TransactionProvider = ({ children }) => {
   useEffect(() => {
     checkIfWalletIsConnected();
   }, []);
+
   return (
     <TransactionContext.Provider
       value={{

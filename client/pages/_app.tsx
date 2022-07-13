@@ -1,6 +1,6 @@
 import "../styles/globals.css";
 import type { AppProps } from "next/app";
-import { TransactionProvider } from "../contexts/TrasactionContext";
+import { TransactionProvider } from "../contexts/TransactionContext";
 
 function MyApp({ Component, pageProps }: AppProps) {
   return (

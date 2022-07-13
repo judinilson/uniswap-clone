@@ -4,7 +4,7 @@ import { FiArrowUpRight } from "react-icons/fi";
 import { AiOutlineDown } from "react-icons/ai";
 import { HiOutlineDotsVertical } from "react-icons/hi";
 import { useContext } from "react";
-import { TransactionContext } from "../../contexts/TrasactionContext";
+import { TransactionContext } from "../../contexts/TransactionContext";
 import uniswapLogo from "../../assets/uniswap.png";
 import ethLogo from "../../assets/eth.png";
 

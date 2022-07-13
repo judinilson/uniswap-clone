@@ -20,7 +20,7 @@
     "**/*.ts",
     "**/*.tsx",
     "pages/_app.js",
-    "contexts/TrasactionContext.js",
+    "contexts/TransactionContext.js",
     "pages/index.js"
   ],
   "exclude": ["node_modules"]
