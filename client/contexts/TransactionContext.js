@@ -36,13 +36,13 @@ export const TransactionProvider = ({ children }) => {
   /**
    * Trigger loading modal
    */
-  // useEffect(() => {
-  //   if (isLoading) {
-  //     router.push(`/?loading=${currentAccount}`);
-  //   } else {
-  //     router.push(`/`);
-  //   }
-  // }, [isLoading]);
+  useEffect(() => {
+    if (isLoading) {
+      router.push(`/?loading=${currentAccount}`);
+    } else {
+      router.push(`/`);
+    }
+  }, [isLoading]);
 
   /**
    * Create user profile in Sanity

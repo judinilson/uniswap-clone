@@ -4,13 +4,14 @@ import Head from "next/head";
 import Image from "next/image";
 import Header from "./components/Header";
 import Main from "./components/Main";
+import TransactionHistory from "./components/TransactionHistory";
 
 const Home: NextPage = () => {
   return (
     <div className={style.wrapper}>
       <Header />
       <Main />
-      <h2>Transactions</h2>
+      <TransactionHistory />
     </div>
   );
 };

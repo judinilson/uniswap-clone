@@ -4,8 +4,9 @@ import { AiOutlineDown } from "react-icons/ai";
 import ethLogo from "../../assets/eth.png";
 import { useContext } from "react";
 import { TransactionContext } from "../../contexts/TransactionContext";
-// import Modal from "react-modal";
+import Modal from "react-modal";
 import { useRouter } from "next/router";
+import TransactionLoader from "./TransactionLoader";
 
 const Main = () => {
   const { formData, handleChange, sendTransaction } =
@@ -61,9 +62,13 @@ const Main = () => {
         </div>
       </div>
 
-      {/* <Modal isOpen={!!router.query.loading} style={customStyles}>
-       <TransactionLoader />
-     </Modal> */}
+      <Modal
+        isOpen={!!router.query.loading}
+        style={customStyles}
+        ariaHideApp={false}
+      >
+        <TransactionLoader />
+      </Modal>
     </div>
   );
 };
@@ -80,5 +85,21 @@ const style = {
   currencySelectorTicker: `mx-2`,
   currencySelectorArrow: `text-lg`,
   confirmButton: `bg-[#2172E5] my-2 rounded-2xl py-6 px-8 text-xl font-semibold flex items-center justify-center cursor-pointer border border-[#2172E5] hover:border-[#234169]`,
+};
+
+const customStyles = {
+  content: {
+    top: "50%",
+    left: "50%",
+    right: "auto",
+    bottom: "auto",
+    transform: "translate(-50%, -50%)",
+    backgroundColor: "#0a0b0d",
+    padding: 0,
+    border: "none",
+  },
+  overlay: {
+    backgroundColor: "rgba(10, 11, 13, 0.75)",
+  },
 };
 export default Main;
